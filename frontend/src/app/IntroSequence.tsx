@@ -30,9 +30,9 @@ export default function IntroSequence({ onComplete }: IntroSequenceProps) {
         setTimeout(() => {
           onComplete();
         }, 1000); // Wait for the fadeOut animation to finish
-      }, 3500); // 3.5 seconds of serene breathing background
+      }, 1500); // 1.5 seconds of serene background to read
 
-    }, 400); // 400ms pull animation
+    }, 450); // 450ms pull animation
   };
 
   return (
@@ -46,7 +46,17 @@ export default function IntroSequence({ onComplete }: IntroSequenceProps) {
       {/* Surrounding serene reveal behind curtains */}
       <div className={`${styles.sereneReveal} ${step === "revealing" ? styles.revealed : ""}`}>
         <div className={styles.sereneGlow} />
-        <h1 className={styles.sereneTitle}>SOLACE</h1>
+        <div className={styles.introContent}>
+          <h1 className={styles.sereneTitle}>Solace AI</h1>
+          <p className={styles.sereneSubtitle}>Your safe space. Your pace.</p>
+          
+          <div className={styles.sereneStatBox}>
+            <span className={styles.statLabel}>1 in 4</span>
+            <p className={styles.statText}>
+              of us navigate mental health struggles.<br/>You don&apos;t have to carry it alone.
+            </p>
+          </div>
+        </div>
       </div>
 
       {/* Pitch black Curtains */}

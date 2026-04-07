@@ -19,20 +19,30 @@
 }
 
 @keyframes completeFadeOut {
-  from { opacity: 1; visibility: visible; }
-  to { opacity: 0; visibility: hidden; }
+  from {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  to {
+    opacity: 0;
+    visibility: hidden;
+  }
 }
 
 /* ─── Curtains ─── */
 .curtain {
   position: absolute;
-  top: 0;
-  bottom: 0;
-  width: 50vw;
-  background: #000000;
+  top: -10vh;
+  bottom: -10vh;
+  width: 55vw;
+  background: #000;
+  /* Subtle fabric folds */
+  background-image: linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.02) 30%, rgba(255,255,255,0) 50%, rgba(255,255,255,0.015) 70%, rgba(255,255,255,0) 100%);
   z-index: 10;
-  transition: transform 1.5s cubic-bezier(0.65, 0, 0.15, 1);
+  transition: transform 1.8s cubic-bezier(0.5, 0, 0.1, 1);
   will-change: transform;
+  box-shadow: 0 0 50px rgba(0,0,0,1);
 }
 
 .leftCurtain {
@@ -46,11 +56,11 @@
 }
 
 .curtainsOpen .leftCurtain {
-  transform: translateX(-100%);
+  transform: translateX(-110%) skewX(-3deg);
 }
 
 .curtainsOpen .rightCurtain {
-  transform: translateX(100%);
+  transform: translateX(110%) skewX(3deg);
 }
 
 /* ─── Pull Chain UI ─── */
@@ -65,7 +75,8 @@
   align-items: center;
   flex-direction: column;
   cursor: pointer;
-  padding-bottom: 40px; /* click area */
+  padding-bottom: 40px;
+  /* click area */
   transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
@@ -75,7 +86,8 @@
 }
 
 .switchContainer.pulling {
-  transform: translateX(-50%) translateY(40px); /* The pull down effect */
+  transform: translateX(-50%) translateY(40px);
+  /* The pull down effect */
 }
 
 /* The cord itself */
@@ -96,12 +108,10 @@
   left: -2px;
   right: -2px;
   bottom: 0;
-  background: repeating-linear-gradient(
-    transparent,
-    transparent 4px,
-    rgba(0,0,0,0.3) 4px,
-    rgba(0,0,0,0.3) 6px
-  );
+  background: repeating-linear-gradient(transparent,
+      transparent 4px,
+      rgba(0, 0, 0, 0.3) 4px,
+      rgba(0, 0, 0, 0.3) 6px);
 }
 
 /* The fob/handle at the end */
@@ -110,7 +120,7 @@
   height: 24px;
   background: linear-gradient(135deg, #bbb, #fff);
   border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(255,255,255,0.2), inset 0 2px 4px rgba(255,255,255,0.5);
+  box-shadow: 0 4px 12px rgba(255, 255, 255, 0.2), inset 0 2px 4px rgba(255, 255, 255, 0.5);
   margin-top: -2px;
   z-index: 2;
 }
@@ -135,21 +145,31 @@
   width: 60px;
   height: 60px;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
   animation: pulse 2s infinite;
   pointer-events: none;
 }
 
 @keyframes pulse {
-  0%, 100% { transform: scale(1); opacity: 0.5; }
-  50% { transform: scale(1.5); opacity: 0.8; }
+
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 0.5;
+  }
+
+  50% {
+    transform: scale(1.5);
+    opacity: 0.8;
+  }
 }
 
 /* ─── Serene Background Revealed ─── */
 .sereneReveal {
   position: absolute;
   inset: 0;
-  background: var(--bg-primary, #0A0710);
+  /* FORCE dark cinematic background to prevent bright white flash */
+  background: #0A0710;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -168,27 +188,87 @@
   width: 60vw;
   height: 60vw;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(181, 165, 219, 0.4), rgba(228, 190, 175, 0.2), transparent 70%);
+  background: radial-gradient(circle, rgba(181, 165, 219, 0.15), rgba(228, 190, 175, 0.08), transparent 70%);
   filter: blur(80px);
   animation: calmBreath 8s ease-in-out infinite;
 }
 
+.introContent {
+  position: relative;
+  z-index: 6;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
 .sereneTitle {
   font-family: var(--font-serif, serif);
-  font-size: clamp(3rem, 8vw, 6rem);
-  color: var(--text-primary, #fff);
-  letter-spacing: 0.2em;
+  font-size: clamp(3rem, 8vw, 5.5rem);
+  /* Force light color for dark cinematic backdrop */
+  color: #fff;
+  letter-spacing: 0.1em;
   opacity: 0;
   transform: scale(0.95);
-  transition: opacity 2s ease 0.5s, transform 4s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: opacity 1.5s ease 0.4s, transform 3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.sereneSubtitle {
+  font-family: var(--font-sans, sans-serif);
+  font-size: 1.15rem;
+  color: #D4CDE0;
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity 1.2s ease 0.8s, transform 1.2s ease 0.8s;
+}
+
+.sereneStatBox {
+  margin-top: 1.5rem;
+  padding: 1.5rem 2.5rem;
+  background: rgba(255, 255, 255, 0.04);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: var(--radius-xl, 24px);
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 1.2s ease 1.2s, transform 1.2s ease 1.2s;
+  max-width: 420px;
+}
+
+.statLabel {
+  display: block;
+  font-family: var(--font-serif, serif);
+  font-size: 2.25rem;
+  color: #F4B6C2;
+  margin-bottom: 0.5rem;
+}
+
+.statText {
+  font-size: 0.95rem;
+  color: #9B8EA9;
+  line-height: 1.6;
 }
 
 .revealed .sereneTitle {
   opacity: 1;
-  transform: scale(1.05); /* Slow upscale for breathing effect */
+  transform: scale(1.02);
+}
+
+.revealed .sereneSubtitle, 
+.revealed .sereneStatBox {
+  opacity: 1;
+  transform: scale(1) translateY(0);
 }
 
 @keyframes calmBreath {
-  0%, 100% { transform: scale(1) translateY(0); opacity: 0.6; }
-  50% { transform: scale(1.1) translateY(-20px); opacity: 0.9; }
+  0%, 100% {
+    transform: scale(1) translateY(0);
+    opacity: 0.6;
+  }
+  50% {
+    transform: scale(1.1) translateY(-20px);
+    opacity: 0.9;
+  }
 }
