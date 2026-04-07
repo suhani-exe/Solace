@@ -5,8 +5,9 @@ import styles from "./lavalamp.module.css";
 
 /**
  * LavaLampBg — Dreamy ambient background with organic blobs
- * that gently drift and respond to pointer movement.
- * Pure CSS blobs + rAF for pointer tracking = smooth 60fps.
+ * that drift organically AND shift significantly with pointer movement.
+ * Each blob has its own CSS drift animation + JS-driven parallax.
+ * The pointer offset is strong enough to feel alive and responsive.
  */
 export default function LavaLampBg() {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -17,8 +18,15 @@ export default function LavaLampBg() {
   const rafId = useRef<number | null>(null);
   const isPointerInside = useRef(false);
 
-  // Parallax depth multipliers for each blob (different depths)
-  const depths = [0.02, 0.03, 0.015, 0.025, 0.018, 0.012];
+  // Each blob's base CSS animation phase (in seconds, stored for additive transform)
+  const blobConfigs = useRef([
+    { depth: 0.08, speed: 28, phaseX: 0, phaseY: 0 },   // blob1: peach
+    { depth: 0.12, speed: 32, phaseX: 2, phaseY: 1.5 },  // blob2: lavender
+    { depth: 0.06, speed: 24, phaseX: 4, phaseY: 3 },    // blob3: pink
+    { depth: 0.10, speed: 30, phaseX: 1, phaseY: 4.5 },  // blob4: cream
+    { depth: 0.07, speed: 26, phaseX: 3.5, phaseY: 2 },  // blob5: rose
+    { depth: 0.05, speed: 34, phaseX: 5, phaseY: 0.5 },  // blob6: sage
+  ]);
 
   const handlePointerMove = useCallback((e: PointerEvent) => {
     const w = window.innerWidth;
@@ -30,9 +38,9 @@ export default function LavaLampBg() {
     };
     isPointerInside.current = true;
 
-    // Move cursor glow
+    // Move cursor glow (centered on pointer)
     if (cursorGlowRef.current) {
-      cursorGlowRef.current.style.transform = `translate(${e.clientX - 150}px, ${e.clientY - 150}px)`;
+      cursorGlowRef.current.style.transform = `translate(${e.clientX - 200}px, ${e.clientY - 200}px)`;
       cursorGlowRef.current.classList.remove(styles.cursorGlowHidden);
     }
   }, []);
@@ -44,28 +52,43 @@ export default function LavaLampBg() {
     }
   }, []);
 
-  // Animation loop — smoothly lerp blob positions toward pointer offset
+  // Main animation loop
   useEffect(() => {
     const lerp = (a: number, b: number, t: number) => a + (b - a) * t;
+    let time = 0;
 
     const animate = () => {
+      time += 0.016; // ~60fps time increment
+
       const targetX = isPointerInside.current ? mousePos.current.x : 0;
       const targetY = isPointerInside.current ? mousePos.current.y : 0;
 
-      // Smooth lerp toward target (very gentle)
-      currentOffset.current.x = lerp(currentOffset.current.x, targetX, 0.03);
-      currentOffset.current.y = lerp(currentOffset.current.y, targetY, 0.03);
+      // Lerp toward pointer (0.04 = responsive but smooth)
+      currentOffset.current.x = lerp(currentOffset.current.x, targetX, 0.04);
+      currentOffset.current.y = lerp(currentOffset.current.y, targetY, 0.04);
 
-      // Apply parallax offset to each blob
+      const w = window.innerWidth;
+      const h = window.innerHeight;
+
       blobRefs.current.forEach((blob, i) => {
         if (!blob) return;
-        const depth = depths[i] || 0.02;
-        const offsetX = currentOffset.current.x * depth * window.innerWidth;
-        const offsetY = currentOffset.current.y * depth * window.innerHeight;
-        // Apply as additional transform (CSS animation handles base drift)
-        blob.style.setProperty("--parallax-x", `${offsetX}px`);
-        blob.style.setProperty("--parallax-y", `${offsetY}px`);
-        blob.style.transform = `translate(${offsetX}px, ${offsetY}px)`;
+        const config = blobConfigs.current[i];
+
+        // 1. CSS-like organic drift (sine waves)
+        const driftX = Math.sin(time / config.speed * Math.PI * 2 + config.phaseX) * 60;
+        const driftY = Math.cos(time / config.speed * Math.PI * 2 + config.phaseY) * 50;
+
+        // 2. Pointer parallax — stronger depth values = more movement
+        const parallaxX = currentOffset.current.x * config.depth * w;
+        const parallaxY = currentOffset.current.y * config.depth * h;
+
+        // 3. Subtle scale breathing
+        const scale = 1 + Math.sin(time / config.speed * Math.PI * 2 + config.phaseX) * 0.06;
+
+        // Combined transform
+        const tx = driftX + parallaxX;
+        const ty = driftY + parallaxY;
+        blob.style.transform = `translate(${tx}px, ${ty}px) scale(${scale.toFixed(3)})`;
       });
 
       rafId.current = requestAnimationFrame(animate);
@@ -95,7 +118,7 @@ export default function LavaLampBg() {
 
   return (
     <div className={styles.container} ref={containerRef} aria-hidden="true">
-      {/* Organic blobs — each at a different depth/position */}
+      {/* Organic blobs — JS drives ALL transform (drift + parallax + scale) */}
       <div className={`${styles.blob} ${styles.blob1}`} ref={setBlobRef(0)} />
       <div className={`${styles.blob} ${styles.blob2}`} ref={setBlobRef(1)} />
       <div className={`${styles.blob} ${styles.blob3}`} ref={setBlobRef(2)} />

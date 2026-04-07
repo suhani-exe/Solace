@@ -1,5 +1,7 @@
 /* ═══════════════════════════════════════════════
-   Main Page — Interactive Dashboard
+   Main Page — Premium Interactive Dashboard
+   Scroll-reveal sections, creative transitions
+   Transparent bg reveals lava lamp
    ═══════════════════════════════════════════════ */
 
 .mainPage {
@@ -11,7 +13,7 @@
   scroll-behavior: smooth;
   opacity: 0;
   transform: translateY(30px);
-  transition: opacity 0.5s var(--ease-out), transform 0.5s var(--ease-out);
+  transition: opacity 0.6s var(--ease-out), transform 0.6s var(--ease-out);
 }
 
 .mainPage.visible {
@@ -25,50 +27,50 @@
   transition: opacity 0.4s ease, transform 0.4s ease;
 }
 
-/* Background Orbs */
-.bgOrbs {
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  z-index: 0;
-  overflow: hidden;
+/* ─── Section Reveal System ─── */
+.revealSection,
+.journeySection,
+.statsSection,
+.encourageSection {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: opacity 0.8s var(--ease-out), transform 0.8s var(--ease-out);
 }
 
-.bgOrb1, .bgOrb2, .bgOrb3 {
-  position: absolute;
-  border-radius: 50%;
-  filter: blur(100px);
-  opacity: 0.3;
+.sectionRevealed {
+  opacity: 1 !important;
+  transform: translateY(0) !important;
 }
 
-.bgOrb1 {
-  width: 500px;
-  height: 500px;
-  background: radial-gradient(circle, rgba(255,214,201,0.4) 0%, transparent 70%);
-  top: -150px;
-  right: -100px;
-  animation: floatOrb 20s ease-in-out infinite;
+/* ─── Section Dividers ─── */
+.sectionDivider {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-lg);
+  padding: var(--space-xl) var(--space-xl);
+  max-width: 500px;
+  margin: 0 auto;
 }
 
-.bgOrb2 {
-  width: 400px;
-  height: 400px;
-  background: radial-gradient(circle, rgba(230,217,255,0.35) 0%, transparent 70%);
-  bottom: 10%;
-  left: -100px;
-  animation: floatOrb 24s ease-in-out infinite reverse;
+.dividerLine {
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    var(--border-strong) 50%,
+    transparent 100%
+  );
 }
 
-.bgOrb3 {
-  width: 300px;
-  height: 300px;
-  background: radial-gradient(circle, rgba(244,182,194,0.25) 0%, transparent 70%);
-  top: 40%;
-  left: 50%;
-  animation: floatOrb 18s ease-in-out infinite 4s;
+.dividerEmoji {
+  font-size: 1rem;
+  opacity: 0.6;
+  animation: gentlePulse 4s ease-in-out infinite;
 }
 
-/* Back Button */
+/* ─── Back Button ─── */
 .backBtn {
   position: sticky;
   top: var(--space-lg);
@@ -79,7 +81,8 @@
   gap: var(--space-sm);
   padding: var(--space-sm) var(--space-lg);
   background: var(--bg-glass);
-  backdrop-filter: blur(16px);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
   border: 1px solid var(--border);
   border-radius: var(--radius-full);
   color: var(--text-secondary);
@@ -99,9 +102,9 @@
   transform: translateX(-4px);
 }
 
-/* Hero Section */
+/* ═══════════ Hero Section ═══════════ */
 .heroSection {
-  min-height: 50vh;
+  min-height: 65vh;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -121,36 +124,101 @@
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 300px;
-  height: 300px;
+  width: 350px;
+  height: 350px;
   border-radius: 50%;
   background: var(--gradient-peach-lavender);
-  opacity: 0.15;
-  filter: blur(60px);
-  animation: gentlePulse 5s ease-in-out infinite;
+  opacity: 0.2;
+  filter: blur(70px);
+  animation: gentlePulse 6s ease-in-out infinite;
+}
+
+.heroGreeting {
+  font-size: 0.8125rem;
+  color: var(--text-muted);
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  margin-bottom: var(--space-md);
+  animation: fadeSlideUp 0.6s var(--ease-out) 0.3s both;
+  position: relative;
 }
 
 .heroTitle {
   font-family: var(--font-serif);
-  font-size: clamp(2.5rem, 5vw, 3.5rem);
+  font-size: clamp(3rem, 6vw, 4.5rem);
   color: var(--text-primary);
-  line-height: 1.15;
+  line-height: 1.1;
   margin-bottom: var(--space-md);
   position: relative;
+  animation: fadeSlideUp 0.8s var(--ease-out) 0.4s both;
 }
 
 .heroTitle em {
   color: var(--accent);
   font-style: italic;
+  background: var(--gradient-peach-lavender);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
 .heroSubtitle {
   font-size: 1.125rem;
   color: var(--text-tertiary);
   position: relative;
+  animation: fadeSlideUp 0.8s var(--ease-out) 0.55s both;
+  margin-bottom: var(--space-lg);
 }
 
-/* Journey Section */
+.heroQuote {
+  font-family: var(--font-serif);
+  font-size: 0.9375rem;
+  color: var(--text-muted);
+  font-style: italic;
+  animation: quoteIn 0.8s var(--ease-out) both;
+  position: relative;
+  padding: var(--space-sm) var(--space-lg);
+  border-radius: var(--radius-full);
+  background: var(--bg-glass);
+  backdrop-filter: blur(12px);
+  border: 1px solid var(--border);
+  display: inline-block;
+}
+
+@keyframes quoteIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Scroll indicator */
+.scrollIndicator {
+  margin-top: var(--space-2xl);
+  display: flex;
+  justify-content: center;
+  animation: fadeSlideUp 0.6s var(--ease-out) 1s both;
+}
+
+.scrollDot {
+  width: 4px;
+  height: 28px;
+  border-radius: var(--radius-full);
+  background: var(--accent);
+  opacity: 0.4;
+  animation: scrollBounce 2s ease-in-out infinite;
+}
+
+@keyframes scrollBounce {
+  0%, 100% { transform: translateY(0); opacity: 0.4; }
+  50% { transform: translateY(10px); opacity: 0.15; }
+}
+
+/* ═══════════ Journey Section ═══════════ */
 .journeySection {
   position: relative;
   z-index: 1;
@@ -165,6 +233,7 @@
   color: var(--text-primary);
   text-align: center;
   margin-bottom: var(--space-xl);
+  position: relative;
 }
 
 .sectionSubtitle {
@@ -183,44 +252,65 @@
 
 .journeyCard {
   text-align: center;
-  padding: var(--space-xl);
-  background: var(--bg-chat);
+  padding: var(--space-xl) var(--space-lg);
+  background: var(--bg-glass);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
   border: 1px solid var(--border);
   border-radius: var(--radius-lg);
   transition: all var(--transition-base);
-  animation: fadeSlideUp 0.6s var(--ease-out) both;
+  position: relative;
+  overflow: hidden;
 }
 
-.journeyCard:nth-child(2) { animation-delay: 0.15s; }
-.journeyCard:nth-child(3) { animation-delay: 0.3s; }
+/* Glow inside card */
+.journeyCardGlow {
+  position: absolute;
+  top: -30px;
+  right: -30px;
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  filter: blur(40px);
+  opacity: 0.5;
+  transition: opacity var(--transition-base);
+  pointer-events: none;
+}
 
 .journeyCard:hover {
-  transform: translateY(-4px);
+  transform: translateY(-6px) scale(1.02);
   box-shadow: var(--shadow-md);
+  border-color: rgba(232, 160, 180, 0.2);
+}
+
+.journeyCard:hover .journeyCardGlow {
+  opacity: 0.8;
 }
 
 .journeyEmoji {
   font-size: 1.5rem;
   display: block;
   margin-bottom: var(--space-sm);
+  position: relative;
 }
 
 .journeyNumber {
   font-family: var(--font-serif);
-  font-size: 2rem;
+  font-size: 2.25rem;
   color: var(--text-primary);
   font-weight: 600;
   line-height: 1.2;
-  animation: countUp 0.6s var(--ease-out) both;
+  position: relative;
 }
 
 .journeyLabel {
   font-size: 0.8125rem;
   color: var(--text-muted);
   margin-top: var(--space-xs);
+  position: relative;
 }
 
-/* Stats Section */
+/* ═══════════ Stats Section ═══════════ */
 .statsSection {
   position: relative;
   z-index: 1;
@@ -237,17 +327,20 @@
 
 .statCard {
   padding: var(--space-xl);
-  background: var(--bg-chat);
+  background: var(--bg-glass);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
   border: 1px solid var(--border);
   border-radius: var(--radius-lg);
   position: relative;
   overflow: hidden;
   opacity: 0;
-  transform: translateY(20px);
-  transition: all 0.6s var(--ease-out);
+  transform: translateY(24px);
+  transition: all 0.7s var(--ease-out);
   transition-delay: var(--card-delay);
 }
 
+/* Top accent strip */
 .statCard::before {
   content: '';
   position: absolute;
@@ -257,6 +350,21 @@
   height: 3px;
   background: var(--card-color);
   opacity: 0.8;
+  transition: opacity var(--transition-base);
+}
+
+/* Inner glow */
+.statCardGlow {
+  position: absolute;
+  top: -20px;
+  right: -20px;
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  filter: blur(35px);
+  opacity: 0.2;
+  pointer-events: none;
+  transition: opacity var(--transition-base);
 }
 
 .statVisible {
@@ -265,13 +373,23 @@
 }
 
 .statCard:hover {
-  transform: translateY(-4px);
+  transform: translateY(-5px) scale(1.01);
   box-shadow: var(--shadow-md);
+}
+
+.statCard:hover .statCardGlow {
+  opacity: 0.4;
+}
+
+.statCard:hover::before {
+  opacity: 1;
+  height: 4px;
 }
 
 .statIcon {
   font-size: 1.5rem;
   margin-bottom: var(--space-sm);
+  position: relative;
 }
 
 .statNumber {
@@ -281,6 +399,7 @@
   font-weight: 600;
   margin-bottom: var(--space-sm);
   line-height: 1.2;
+  position: relative;
 }
 
 .statDesc {
@@ -288,15 +407,17 @@
   color: var(--text-secondary);
   line-height: 1.6;
   margin-bottom: var(--space-sm);
+  position: relative;
 }
 
 .statSource {
   font-size: 0.6875rem;
   color: var(--text-muted);
   font-style: italic;
+  position: relative;
 }
 
-/* Encouragement Section */
+/* ═══════════ Encouragement Section ═══════════ */
 .encourageSection {
   position: relative;
   z-index: 1;
@@ -308,31 +429,53 @@
 .encourageCard {
   text-align: center;
   padding: var(--space-2xl) var(--space-xl);
-  background: var(--gradient-soft);
+  background: var(--bg-glass);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
   border: 1px solid var(--border);
   border-radius: var(--radius-xl);
   position: relative;
   overflow: hidden;
+  transition: all var(--transition-base);
+}
+
+.encourageCard:hover {
+  box-shadow: var(--shadow-lg);
+  border-color: rgba(232, 160, 180, 0.2);
 }
 
 .encourageOrb {
   position: absolute;
-  top: -40px;
-  right: -40px;
-  width: 200px;
-  height: 200px;
+  top: -50px;
+  right: -50px;
+  width: 220px;
+  height: 220px;
   border-radius: 50%;
   background: var(--gradient-peach-lavender);
-  opacity: 0.2;
+  opacity: 0.18;
+  filter: blur(50px);
+  animation: gentlePulse 6s ease-in-out infinite;
+}
+
+.encourageOrb2 {
+  position: absolute;
+  bottom: -40px;
+  left: -40px;
+  width: 180px;
+  height: 180px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(184, 212, 200, 0.3) 0%, transparent 70%);
   filter: blur(40px);
+  animation: gentlePulse 7s ease-in-out infinite 2s;
 }
 
 .encourageTitle {
   font-family: var(--font-serif);
-  font-size: 1.5rem;
+  font-size: 1.75rem;
   color: var(--text-primary);
   margin-bottom: var(--space-md);
   position: relative;
+  line-height: 1.3;
 }
 
 .encourageText {
@@ -352,13 +495,14 @@
 }
 
 .footerSpacer {
-  height: var(--space-3xl);
+  height: var(--space-4xl);
 }
 
-/* Responsive */
+/* ═══════════ Responsive ═══════════ */
 @media (max-width: 768px) {
   .journeyGrid {
     grid-template-columns: 1fr;
+    gap: var(--space-md);
   }
 
   .statsGrid {
@@ -366,11 +510,19 @@
   }
 
   .heroTitle {
-    font-size: 2rem;
+    font-size: 2.5rem;
+  }
+
+  .heroSection {
+    min-height: 55vh;
   }
 
   .backBtn {
     margin: var(--space-md);
+  }
+
+  .sectionDivider {
+    padding: var(--space-md) var(--space-xl);
   }
 }
 
