@@ -23,18 +23,22 @@ class GeminiClient:
         temperature: float = 0.8,
         max_tokens: int = 1024,
     ) -> str:
-        """Non-streaming generation for analysis tasks (emotion, safety, quality)."""
+        """Non-streaming generation."""
         config = types.GenerateContentConfig(
             temperature=temperature,
             max_output_tokens=max_tokens,
             system_instruction=system_instruction,
         )
-        response = await self.client.aio.models.generate_content(
-            model=self.model,
-            contents=prompt,
-            config=config,
-        )
-        return response.text or ""
+
+        try:
+            response = await self.client.aio.models.generate_content(
+                model=self.model,
+                contents=prompt,
+                config=config,
+            )
+            return getattr(response, "text", "") or ""
+        except Exception as e:
+            return f"[ERROR] {str(e)}"
 
     async def generate_json(
         self,
@@ -49,20 +53,26 @@ class GeminiClient:
             response_mime_type="application/json",
             system_instruction=system_instruction,
         )
-        response = await self.client.aio.models.generate_content(
-            model=self.model,
-            contents=prompt,
-            config=config,
-        )
-        text = response.text or "{}"
+
+        try:
+            response = await self.client.aio.models.generate_content(
+                model=self.model,
+                contents=prompt,
+                config=config,
+            )
+            text = getattr(response, "text", "") or "{}"
+        except Exception:
+            return {}
+
+        # Try parsing JSON safely
         try:
             return json.loads(text)
         except json.JSONDecodeError:
-            # Try to extract JSON from markdown code blocks
             if "```json" in text:
                 text = text.split("```json")[1].split("```")[0].strip()
             elif "```" in text:
                 text = text.split("```")[1].split("```")[0].strip()
+
             try:
                 return json.loads(text)
             except json.JSONDecodeError:
@@ -81,21 +91,32 @@ class GeminiClient:
             max_output_tokens=max_tokens,
             system_instruction=system_instruction,
         )
-        async for chunk in self.client.aio.models.generate_content_stream(
-            model=self.model,
-            contents=prompt,
-            config=config,
-        ):
-            if chunk.text:
-                yield chunk.text
+
+        try:
+            # ✅ FIX: must await first
+            stream = await self.client.aio.models.generate_content_stream(
+                model=self.model,
+                contents=prompt,
+                config=config,
+            )
+
+            # ✅ Proper async iteration
+            async for chunk in stream:
+                text = getattr(chunk, "text", None)
+                if text:
+                    yield text
+
+        except Exception as e:
+            # ✅ Prevent silent failure (VERY important for debugging)
+            yield f"\n[STREAM ERROR]: {str(e)}"
 
 
 # Singleton
-_gemini_client: GeminiClient | None = None
+_gemini_client: Optional[GeminiClient] = None
 
 
 def get_gemini_client() -> GeminiClient:
     global _gemini_client
     if _gemini_client is None:
         _gemini_client = GeminiClient()
-    return _gemini_client
+    return _gemini_client 
