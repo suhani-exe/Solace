@@ -1,0 +1,57 @@
+.settingsPage {
+  min-height: 100vh;
+  background: var(--bg-primary);
+  padding: var(--space-xl);
+}
+
+.settingsContainer {
+  max-width: 640px;
+  margin: 0 auto;
+}
+
+.header {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+  margin-bottom: var(--space-2xl);
+}
+
+.sections {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2xl);
+}
+
+.section h2 {
+  margin-bottom: var(--space-md);
+}
+
+.card {
+  background: var(--bg-chat);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-xl);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.field label {
+  color: var(--text-muted);
+}
+
+.streakDisplay {
+  display: flex;
+  align-items: center;
+  gap: var(--space-lg);
+}
+
+.streakEmoji {
+  font-size: 2.5rem;
+}

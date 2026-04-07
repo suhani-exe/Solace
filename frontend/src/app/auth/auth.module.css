@@ -1,0 +1,133 @@
+/* ─── Auth Pages ─── */
+.authPage {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+  background: var(--bg-primary);
+}
+
+.ambientOrbs {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.orb1, .orb2 {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  opacity: 0.3;
+}
+
+.orb1 {
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(circle, rgba(196, 120, 94, 0.25) 0%, transparent 70%);
+  top: -80px;
+  right: -80px;
+  animation: floatOrb 20s ease-in-out infinite;
+}
+
+.orb2 {
+  width: 350px;
+  height: 350px;
+  background: radial-gradient(circle, rgba(139, 168, 136, 0.2) 0%, transparent 70%);
+  bottom: -50px;
+  left: -50px;
+  animation: floatOrb 25s ease-in-out infinite reverse;
+}
+
+.authContainer {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 440px;
+  padding: var(--space-xl);
+  animation: fadeSlideUp 0.6s var(--ease-out) both;
+}
+
+.authCard {
+  background: var(--bg-glass);
+  backdrop-filter: blur(24px);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xl);
+  padding: var(--space-2xl);
+  box-shadow: var(--shadow-lg);
+}
+
+.authLogo {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-xl);
+  cursor: pointer;
+}
+
+.logoIcon {
+  font-size: 1.5rem;
+  color: var(--accent);
+}
+
+.logoText {
+  font-family: var(--font-serif);
+  font-size: 1.5rem;
+  color: var(--text-primary);
+}
+
+.authForm {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+}
+
+.fieldGroup {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.label {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+}
+
+.submitBtn {
+  width: 100%;
+  margin-top: var(--space-sm);
+  padding: var(--space-md) !important;
+}
+
+.error {
+  background: rgba(220, 80, 80, 0.08);
+  border: 1px solid rgba(220, 80, 80, 0.2);
+  border-radius: var(--radius-md);
+  padding: var(--space-md);
+  color: #C85050;
+  font-size: 0.875rem;
+  margin-bottom: var(--space-md);
+  animation: fadeSlideDown 0.3s ease both;
+}
+
+.authSwitch {
+  text-align: center;
+  margin-top: var(--space-xl);
+  font-size: 0.875rem;
+  color: var(--text-tertiary);
+}
+
+.authSwitch a {
+  color: var(--accent);
+  font-weight: 500;
+}
+
+.authSwitch a:hover {
+  color: var(--accent-hover);
+}

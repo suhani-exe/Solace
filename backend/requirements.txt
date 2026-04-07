@@ -1,0 +1,32 @@
+# FastAPI + Server
+fastapi==0.115.12
+uvicorn[standard]==0.34.2
+python-multipart==0.0.20
+
+# Database
+sqlalchemy[asyncio]==2.0.40
+asyncpg==0.30.0
+pgvector==0.3.6
+alembic==1.15.2
+
+# Redis
+redis[hiredis]==5.3.0
+
+# Auth
+python-jose[cryptography]==3.4.0
+passlib[bcrypt]==1.7.4
+bcrypt==4.3.0
+
+# Pydantic
+pydantic==2.11.3
+pydantic-settings==2.9.1
+
+# Google Gemini
+google-genai==1.14.0
+
+# Utilities
+python-dotenv==1.1.0
+httpx==0.28.1
+
+# Background tasks (Phase 3)
+# celery==5.5.1
