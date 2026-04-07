@@ -1,0 +1,183 @@
+/* ═══════════════════════════════════════════════
+   Profile Popup
+   ═══════════════════════════════════════════════ */
+
+.backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  animation: fadeIn 0.2s ease both;
+}
+
+.backdropClosing {
+  animation: fadeOut 0.3s ease both;
+}
+
+.popup {
+  position: absolute;
+  top: 60px;
+  right: var(--space-xl);
+  width: 300px;
+  background: var(--bg-chat);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-lg), 0 0 60px var(--lavender-light);
+  padding: var(--space-xl);
+  animation: popIn 0.35s var(--ease-out) both;
+  overflow: hidden;
+}
+
+.popupClosing {
+  animation: slideDownOverlay 0.3s var(--ease-out) both;
+}
+
+/* Avatar */
+.avatarSection {
+  display: flex;
+  justify-content: center;
+  margin-bottom: var(--space-md);
+}
+
+.avatarLarge {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: var(--gradient-peach-lavender);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  font-weight: 600;
+  font-family: var(--font-serif);
+  box-shadow: 0 4px 16px var(--peach-light);
+}
+
+/* Name */
+.nameSection {
+  text-align: center;
+  margin-bottom: var(--space-lg);
+}
+
+.nameDisplay {
+  background: none;
+  border: none;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  padding: var(--space-xs) var(--space-sm);
+  border-radius: var(--radius-sm);
+  transition: all var(--transition-fast);
+  font-family: var(--font-sans);
+}
+
+.nameDisplay:hover {
+  background: var(--accent-light);
+}
+
+.nameText {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.editIcon {
+  font-size: 0.75rem;
+  opacity: 0;
+  transition: opacity var(--transition-fast);
+}
+
+.nameDisplay:hover .editIcon {
+  opacity: 1;
+}
+
+.nameEditRow {
+  display: flex;
+  justify-content: center;
+}
+
+.nameInput {
+  text-align: center;
+  border: 1px solid var(--accent);
+  border-radius: var(--radius-sm);
+  padding: var(--space-xs) var(--space-md);
+  font-family: var(--font-sans);
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  background: var(--bg-primary);
+  outline: none;
+  width: 80%;
+  box-shadow: 0 0 0 3px var(--accent-light);
+}
+
+.email {
+  font-size: 0.8125rem;
+  color: var(--text-muted);
+  margin-top: var(--space-xs);
+}
+
+/* Streak */
+.streakSection {
+  background: var(--bg-primary);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: var(--space-md);
+  margin-bottom: var(--space-md);
+}
+
+.streakStage {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+}
+
+.streakEmoji {
+  font-size: 1.75rem;
+}
+
+.streakDays {
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.streakLabel {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+/* Actions */
+.actions {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.actionBtn {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  width: 100%;
+  padding: var(--space-sm) var(--space-md);
+  border: none;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--text-secondary);
+  font-family: var(--font-sans);
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  text-align: left;
+}
+
+.actionBtn:hover {
+  background: var(--accent-light);
+  color: var(--text-primary);
+}
+
+@keyframes fadeOut {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}

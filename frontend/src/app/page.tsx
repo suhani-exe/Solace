@@ -7,15 +7,20 @@ import styles from "./page.module.css";
 export default function LandingPage() {
   const router = useRouter();
   const [isVisible, setIsVisible] = useState(false);
+  const [isDark, setIsDark] = useState(false);
 
   useEffect(() => {
     setIsVisible(true);
-    // Check if user is already logged in
-    const token = localStorage.getItem("solace_token");
-    if (token) {
-      // Don't auto-redirect, let them see the landing
-    }
+    const theme = localStorage.getItem("solace_theme");
+    setIsDark(theme === "dark");
   }, []);
+
+  const toggleTheme = () => {
+    const next = !isDark;
+    setIsDark(next);
+    document.documentElement.setAttribute("data-theme", next ? "dark" : "");
+    localStorage.setItem("solace_theme", next ? "dark" : "light");
+  };
 
   return (
     <div className={styles.landing}>
@@ -24,6 +29,7 @@ export default function LandingPage() {
         <div className={styles.orb1} />
         <div className={styles.orb2} />
         <div className={styles.orb3} />
+        <div className={styles.orb4} />
       </div>
 
       {/* Navigation */}
@@ -34,6 +40,13 @@ export default function LandingPage() {
             <span className={styles.logoText}>Solace</span>
           </div>
           <div className={styles.navActions}>
+            <button
+              className="themeToggle"
+              onClick={toggleTheme}
+              aria-label="Toggle dark mode"
+            >
+              {isDark ? "☀️" : "🌙"}
+            </button>
             <button
               className="btn btn-ghost"
               onClick={() => router.push("/auth/login")}
@@ -65,7 +78,7 @@ export default function LandingPage() {
           </h1>
 
           <p className={`body-lg ${styles.subtitle}`}>
-            Solace isn't another chatbot. It reads between the lines of what you say,
+            Solace isn&apos;t another chatbot. It reads between the lines of what you say,
             remembers your world across conversations, and responds like someone who
             genuinely knows you.
           </p>
@@ -97,13 +110,13 @@ export default function LandingPage() {
             </div>
             <div className={styles.previewMessages}>
               <div className={`${styles.previewMsg} ${styles.previewUser}`}>
-                <p>I don't know, everything just feels heavy lately. Like I'm carrying stuff that isn't even mine.</p>
+                <p>I don&apos;t know, everything just feels heavy lately. Like I&apos;m carrying stuff that isn&apos;t even mine.</p>
               </div>
               <div className={`${styles.previewMsg} ${styles.previewAI}`}>
                 <p>
-                  That weight you're describing — the part that isn't even yours — that caught me.
-                  You're holding onto other people's burdens on top of your own, and yet here you are,
-                  still showing up. What's the heaviest thing that doesn't belong to you right now?
+                  That weight you&apos;re describing — the part that isn&apos;t even yours — that caught me.
+                  You&apos;re holding onto other people&apos;s burdens on top of your own, and yet here you are,
+                  still showing up. What&apos;s the heaviest thing that doesn&apos;t belong to you right now?
                 </p>
                 <span className={styles.cursor} />
               </div>
@@ -128,7 +141,7 @@ export default function LandingPage() {
               <div className={styles.featureIcon}>🫧</div>
               <h3 className="heading-3">Reads between the lines</h3>
               <p className="body-sm">
-                "I'm fine" doesn't fool Solace. It detects deflection, minimization,
+                &quot;I&apos;m fine&quot; doesn&apos;t fool Solace. It detects deflection, minimization,
                 and masked distress — the signals beneath what you say.
               </p>
             </div>
@@ -146,7 +159,7 @@ export default function LandingPage() {
               <div className={styles.featureIcon}>🪶</div>
               <h3 className="heading-3">Never reads from a script</h3>
               <p className="body-sm">
-                No "I'm here for you." No "Have you tried meditation?" Every response
+                No &quot;I&apos;m here for you.&quot; No &quot;Have you tried meditation?&quot; Every response
                 references something you actually said.
               </p>
             </div>
@@ -173,7 +186,7 @@ export default function LandingPage() {
               <div className={styles.featureIcon}>☀️</div>
               <h3 className="heading-3">Checks in on you</h3>
               <p className="body-sm">
-                A personalized message each morning — not "How are you?" but something
+                A personalized message each morning — not &quot;How are you?&quot; but something
                 grounded in what you shared yesterday.
               </p>
             </div>

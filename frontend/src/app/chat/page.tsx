@@ -4,6 +4,10 @@ import { useState, useEffect, useRef, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { chatStream, getUser, getSessions, getChatHistory, clearToken } from "@/lib/api";
 import styles from "./chat.module.css";
+import MoodTracker from "./MoodTracker";
+import MoodHistory from "./MoodHistory";
+import ProfilePopup from "./ProfilePopup";
+import MainPage from "./MainPage";
 
 interface ChatMessage {
   id: string;
@@ -60,6 +64,22 @@ const EMOTION_EMOJI: Record<string, string> = {
   confusion: "🌀",
 };
 
+const STREAK_STAGES = [
+  { min: 0, emoji: "🌱" },
+  { min: 3, emoji: "🌿" },
+  { min: 7, emoji: "🌳" },
+  { min: 14, emoji: "🌲" },
+  { min: 30, emoji: "🌸" },
+  { min: 60, emoji: "🌺" },
+];
+
+function getStreakEmoji(days: number) {
+  for (let i = STREAK_STAGES.length - 1; i >= 0; i--) {
+    if (days >= STREAK_STAGES[i].min) return STREAK_STAGES[i].emoji;
+  }
+  return "🌱";
+}
+
 export default function ChatPage() {
   const router = useRouter();
   const [messages, setMessages] = useState<ChatMessage[]>([]);
@@ -78,6 +98,14 @@ export default function ChatPage() {
   const [userScrolled, setUserScrolled] = useState(false);
   const threadRef = useRef<HTMLDivElement>(null);
 
+  // UI overlays
+  const [showMoodTracker, setShowMoodTracker] = useState(true);
+  const [showMoodHistory, setShowMoodHistory] = useState(false);
+  const [showProfile, setShowProfile] = useState(false);
+  const [showMainPage, setShowMainPage] = useState(false);
+  const [isDark, setIsDark] = useState(false);
+  const [streakTooltip, setStreakTooltip] = useState(false);
+
   // Auth check
   useEffect(() => {
     const token = localStorage.getItem("solace_token");
@@ -91,6 +119,10 @@ export default function ChatPage() {
       setCareStreak(user.care_streak_days || 0);
     }
     loadSessions();
+
+    // Theme
+    const theme = localStorage.getItem("solace_theme");
+    setIsDark(theme === "dark");
   }, [router]);
 
   // Ambient emotion color
@@ -116,6 +148,13 @@ export default function ChatPage() {
     const isAtBottom = scrollHeight - scrollTop - clientHeight < 100;
     setUserScrolled(!isAtBottom);
   }, []);
+
+  const toggleTheme = () => {
+    const next = !isDark;
+    setIsDark(next);
+    document.documentElement.setAttribute("data-theme", next ? "dark" : "");
+    localStorage.setItem("solace_theme", next ? "dark" : "light");
+  };
 
   const loadSessions = async () => {
     try {
@@ -160,6 +199,11 @@ export default function ChatPage() {
     setIsLoading(true);
     setUserScrolled(false);
 
+    // Reset textarea height
+    if (textareaRef.current) {
+      textareaRef.current.style.height = "auto";
+    }
+
     // Optimistic UI — show user message immediately
     const userMsg: ChatMessage = {
       id: `temp-${Date.now()}`,
@@ -199,7 +243,6 @@ export default function ChatPage() {
               const emotionData = JSON.parse(data);
               setCurrentEmotion(emotionData.primary_emotion || "neutral");
               setCurrentRisk(emotionData.risk_level || "LOW");
-              // Update the AI message with emotion data
               setMessages((prev) =>
                 prev.map((msg) =>
                   msg.id === aiMsgId
@@ -214,7 +257,6 @@ export default function ChatPage() {
 
           case "token":
             if (isRetrying) {
-              // Clear previous content on retry
               setMessages((prev) =>
                 prev.map((msg) =>
                   msg.id === aiMsgId
@@ -300,17 +342,44 @@ export default function ChatPage() {
     }
   };
 
-  const handleLogout = () => {
-    clearToken();
-    router.push("/");
-  };
-
   return (
     <div className={styles.chatPage}>
+      {/* Mood Tracker Modal */}
+      {showMoodTracker && (
+        <MoodTracker onClose={() => setShowMoodTracker(false)} />
+      )}
+
+      {/* Mood History Modal */}
+      {showMoodHistory && (
+        <MoodHistory onClose={() => setShowMoodHistory(false)} />
+      )}
+
+      {/* Profile Popup */}
+      {showProfile && (
+        <ProfilePopup
+          onClose={() => setShowProfile(false)}
+          onOpenMoodHistory={() => {
+            setShowProfile(false);
+            setShowMoodHistory(true);
+          }}
+          onNameChange={(name) => setUserName(name)}
+        />
+      )}
+
+      {/* Main Page Overlay */}
+      {showMainPage && (
+        <MainPage
+          userName={userName}
+          careStreak={careStreak}
+          sessionCount={sessions.length}
+          onClose={() => setShowMainPage(false)}
+        />
+      )}
+
       {/* Sidebar */}
       <aside className={`${styles.sidebar} ${showSidebar ? styles.sidebarOpen : ""}`}>
         <div className={styles.sidebarHeader}>
-          <div className={styles.sidebarLogo}>
+          <div className={styles.sidebarLogo} onClick={() => { setShowSidebar(false); setShowMainPage(true); }} style={{ cursor: "pointer" }}>
             <span className={styles.logoIcon}>◯</span>
             <span className={styles.logoText}>Solace</span>
           </div>
@@ -322,6 +391,8 @@ export default function ChatPage() {
             ✕
           </button>
         </div>
+
+        <p className={styles.sidebarTagline}>Your safe space 🤍</p>
 
         <button className={`btn btn-primary ${styles.newChatBtn}`} onClick={startNewChat}>
           <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
@@ -372,7 +443,7 @@ export default function ChatPage() {
         </div>
 
         <div className={styles.sidebarFooter}>
-          <button className="btn btn-ghost" onClick={handleLogout} style={{ width: "100%", justifyContent: "flex-start" }}>
+          <button className="btn btn-ghost" onClick={() => { clearToken(); router.push("/"); }} style={{ width: "100%", justifyContent: "flex-start" }}>
             Sign out
           </button>
         </div>
@@ -387,15 +458,21 @@ export default function ChatPage() {
       <main className={styles.chatMain}>
         {/* Header */}
         <header className={styles.chatHeader}>
-          <button
-            className={styles.menuBtn}
-            onClick={() => setShowSidebar(true)}
-            aria-label="Open sidebar"
-          >
-            <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-              <path d="M3 5h14M3 10h14M3 15h14" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
-            </svg>
-          </button>
+          <div className={styles.headerLeft}>
+            <button
+              className={styles.menuBtn}
+              onClick={() => setShowSidebar(true)}
+              aria-label="Open sidebar"
+            >
+              <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                <path d="M3 5h14M3 10h14M3 15h14" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+              </svg>
+            </button>
+            <button className={styles.logoBtn} onClick={() => setShowMainPage(true)} aria-label="Open main page">
+              <span className={styles.logoBtnIcon}>◯</span>
+              <span className={styles.logoBtnText}>Solace</span>
+            </button>
+          </div>
 
           <div className={styles.headerCenter}>
             {currentEmotion !== "neutral" && (
@@ -409,15 +486,37 @@ export default function ChatPage() {
           </div>
 
           <div className={styles.headerRight}>
+            <button
+              className="themeToggle"
+              onClick={toggleTheme}
+              aria-label="Toggle dark mode"
+            >
+              {isDark ? "☀️" : "🌙"}
+            </button>
+
             {careStreak > 0 && (
-              <div className={styles.streakBadge} title={`${careStreak} day care streak`}>
-                <span className={styles.streakFlame}>🌱</span>
+              <div
+                className={styles.streakBadge}
+                onMouseEnter={() => setStreakTooltip(true)}
+                onMouseLeave={() => setStreakTooltip(false)}
+              >
+                <span className={styles.streakFlame}>{getStreakEmoji(careStreak)}</span>
                 <span className={styles.streakCount}>{careStreak}</span>
+                {streakTooltip && (
+                  <div className={styles.streakTooltip}>
+                    You&apos;ve shown up for yourself {careStreak} day{careStreak !== 1 ? "s" : ""} in a row! 💝
+                  </div>
+                )}
               </div>
             )}
-            <div className={styles.avatarCircle}>
+
+            <button
+              className={styles.avatarCircle}
+              onClick={() => setShowProfile(true)}
+              aria-label="Open profile"
+            >
               {userName.charAt(0).toUpperCase()}
-            </div>
+            </button>
           </div>
         </header>
 
@@ -428,7 +527,7 @@ export default function ChatPage() {
               <span className={styles.safetyIcon}>🛡️</span>
               <div>
                 <p className={styles.safetyText}>
-                  If you're in crisis, please reach out to a professional:
+                  If you&apos;re in crisis, please reach out to a professional:
                 </p>
                 <p className={styles.safetyLinks}>
                   <strong>India:</strong> iCall 9152987821 · Vandrevala Foundation 1860-2662-345
@@ -448,12 +547,15 @@ export default function ChatPage() {
         >
           {messages.length === 0 ? (
             <div className={styles.emptyState}>
-              <div className={styles.emptyOrb} />
+              <div className={styles.emptyOrbContainer}>
+                <div className={styles.emptyOrb} />
+                <div className={styles.emptyOrb2} />
+              </div>
               <h2 className="heading-2" style={{ fontFamily: "var(--font-serif)" }}>
                 {userName ? `Hi ${userName}.` : "Hi there."}
               </h2>
               <p className="body-lg" style={{ maxWidth: "400px" }}>
-                Whatever's on your mind — I'm here to listen. Not fix. Not judge.
+                Whatever&apos;s on your mind — I&apos;m here to listen. Not fix. Not judge.
                 Just listen.
               </p>
               <div className={styles.promptSuggestions}>

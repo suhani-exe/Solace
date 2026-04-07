@@ -23,13 +23,13 @@
   position: absolute;
   border-radius: 50%;
   filter: blur(80px);
-  opacity: 0.3;
+  opacity: 0.35;
 }
 
 .orb1 {
   width: 400px;
   height: 400px;
-  background: radial-gradient(circle, rgba(196, 120, 94, 0.25) 0%, transparent 70%);
+  background: radial-gradient(circle, rgba(255, 214, 201, 0.35) 0%, transparent 70%);
   top: -80px;
   right: -80px;
   animation: floatOrb 20s ease-in-out infinite;
@@ -38,7 +38,7 @@
 .orb2 {
   width: 350px;
   height: 350px;
-  background: radial-gradient(circle, rgba(139, 168, 136, 0.2) 0%, transparent 70%);
+  background: radial-gradient(circle, rgba(230, 217, 255, 0.3) 0%, transparent 70%);
   bottom: -50px;
   left: -50px;
   animation: floatOrb 25s ease-in-out infinite reverse;
@@ -59,7 +59,7 @@
   border: 1px solid var(--border);
   border-radius: var(--radius-xl);
   padding: var(--space-2xl);
-  box-shadow: var(--shadow-lg);
+  box-shadow: var(--shadow-lg), 0 0 50px var(--peach-light);
 }
 
 .authLogo {

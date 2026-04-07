@@ -1,0 +1,201 @@
+/* ═══════════════════════════════════════════════
+   Mood Tracker Modal
+   ═══════════════════════════════════════════════ */
+
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.35);
+  backdrop-filter: blur(6px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  animation: fadeIn 0.3s ease both;
+}
+
+.overlayClosing {
+  animation: fadeOut 0.4s ease both;
+}
+
+.modal {
+  background: var(--bg-chat);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xl);
+  padding: var(--space-2xl) var(--space-xl);
+  max-width: 480px;
+  width: 90%;
+  position: relative;
+  box-shadow: var(--shadow-lg), 0 0 80px var(--peach-light);
+  animation: popIn 0.5s var(--ease-out) both;
+}
+
+.modalClosing {
+  animation: slideDownOverlay 0.4s var(--ease-out) both;
+}
+
+.closeBtn {
+  position: absolute;
+  top: var(--space-md);
+  right: var(--space-md);
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  font-size: 1rem;
+  cursor: pointer;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all var(--transition-fast);
+}
+
+.closeBtn:hover {
+  background: var(--accent-light);
+  color: var(--text-secondary);
+}
+
+.header {
+  text-align: center;
+  margin-bottom: var(--space-xl);
+  position: relative;
+}
+
+.headerOrb {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: var(--gradient-peach-lavender);
+  margin: 0 auto var(--space-md);
+  opacity: 0.6;
+  animation: gentlePulse 3s ease-in-out infinite;
+}
+
+.title {
+  font-family: var(--font-serif);
+  font-size: 1.5rem;
+  color: var(--text-primary);
+  margin-bottom: var(--space-xs);
+}
+
+.subtitle {
+  font-size: 0.875rem;
+  color: var(--text-tertiary);
+}
+
+.moodGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-md);
+}
+
+.moodBtn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: var(--space-lg) var(--space-md);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: var(--bg-primary);
+  cursor: pointer;
+  transition: all var(--transition-base);
+  animation: fadeSlideUp 0.4s var(--ease-out) both;
+  position: relative;
+  overflow: hidden;
+  font-family: var(--font-sans);
+}
+
+.moodBtn::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--mood-color);
+  opacity: 0;
+  transition: opacity var(--transition-base);
+}
+
+.moodBtn:hover:not(:disabled) {
+  transform: translateY(-3px) scale(1.03);
+  box-shadow: var(--shadow-md);
+  border-color: var(--mood-color);
+}
+
+.moodBtn:hover:not(:disabled)::before {
+  opacity: 0.08;
+}
+
+.moodBtn:active:not(:disabled) {
+  transform: translateY(0) scale(0.98);
+}
+
+.moodSelected {
+  border-color: var(--mood-color) !important;
+  transform: scale(1.05) !important;
+  box-shadow: 0 0 20px rgba(0,0,0,0.08) !important;
+}
+
+.moodSelected::before {
+  opacity: 0.12 !important;
+}
+
+.moodEmoji {
+  font-size: 2rem;
+  position: relative;
+  z-index: 1;
+  transition: transform var(--transition-base);
+}
+
+.moodBtn:hover:not(:disabled) .moodEmoji {
+  transform: scale(1.15);
+}
+
+.moodLabel {
+  font-size: 0.8125rem;
+  color: var(--text-secondary);
+  font-weight: 500;
+  position: relative;
+  z-index: 1;
+}
+
+/* Thank You State */
+.thankYou {
+  text-align: center;
+  padding: var(--space-xl) 0;
+  animation: scaleIn 0.5s var(--ease-out) both;
+}
+
+.thankYouEmoji {
+  font-size: 3rem;
+  margin-bottom: var(--space-md);
+  animation: softBounce 1.5s ease-in-out infinite;
+}
+
+.thankYouTitle {
+  font-family: var(--font-serif);
+  font-size: 1.25rem;
+  color: var(--text-primary);
+  margin-bottom: var(--space-xs);
+}
+
+.thankYouText {
+  font-size: 0.875rem;
+  color: var(--text-tertiary);
+}
+
+@keyframes fadeOut {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+
+@media (max-width: 480px) {
+  .moodGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .modal {
+    padding: var(--space-xl) var(--space-md);
+  }
+}

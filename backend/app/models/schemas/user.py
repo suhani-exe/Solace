@@ -1,5 +1,5 @@
-from pydantic import BaseModel, EmailStr, Field
-from typing import Optional
+from pydantic import BaseModel, Field
+from typing import Optional, List
 from datetime import datetime
 
 
@@ -38,6 +38,23 @@ class UserProfile(BaseModel):
 
     class Config:
         from_attributes = True
+
+
+class UserProfileUpdate(BaseModel):
+    display_name: Optional[str] = Field(None, min_length=1, max_length=100)
+
+
+class MoodEntry(BaseModel):
+    mood: str = Field(..., description="One of: wonderful, good, okay, meh, struggling, rough")
+
+
+class MoodRecord(BaseModel):
+    date: str
+    mood: str
+
+
+class MoodHistoryResponse(BaseModel):
+    moods: List[MoodRecord]
 
 
 class TokenResponse(BaseModel):

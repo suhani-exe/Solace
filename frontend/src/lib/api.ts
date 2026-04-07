@@ -92,6 +92,34 @@ export async function login(data: { email: string; password: string }) {
   }>("/auth/login", { method: "POST", body: data });
 }
 
+// Profile
+export async function updateProfile(data: { display_name: string }) {
+  return apiJSON<Record<string, unknown>>("/user/profile", {
+    method: "PATCH",
+    body: data,
+  });
+}
+
+// Mood
+export async function submitMood(mood: string) {
+  return apiJSON<{ date: string; mood: string }>("/user/mood", {
+    method: "POST",
+    body: { mood },
+  });
+}
+
+export async function getMoodHistory(days: number = 30) {
+  return apiJSON<{
+    moods: Array<{ date: string; mood: string }>;
+  }>(`/user/mood/history?days=${days}`);
+}
+
+export async function getTodayMood() {
+  return apiJSON<{ date: string; mood: string | null; logged: boolean }>(
+    "/user/mood/today"
+  );
+}
+
 // Chat — SSE streaming
 export function chatStream(
   content: string,

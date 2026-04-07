@@ -1,45 +1,53 @@
 /* ═══════════════════════════════════════════════════════════════
-   SOLACE — Design System
-   Warm, organic, editorial aesthetic.
-   Think: a well-designed journal crossed with a thoughtful letter.
+   SOLACE — Design System v2
+   Warm pastel palette: Peach, Lavender, Cream, Dusty Pink
+   With full dark-mode support via [data-theme="dark"]
    ═══════════════════════════════════════════════════════════════ */
 
 @import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400&display=swap');
 
-/* ─── CSS Custom Properties ─── */
+/* ─── Light Theme (default) ─── */
 :root {
-  /* Color Palette — Warm, organic */
-  --bg-primary: #FAF7F2;
-  --bg-secondary: #F5F0E8;
-  --bg-tertiary: #EDE7DC;
+  /* Color Palette — Warm Pastels */
+  --bg-primary: #FFF8F2;
+  --bg-secondary: #FFF0EB;
+  --bg-tertiary: #F5EAE4;
   --bg-chat: #FFFFFF;
   --bg-glass: rgba(255, 255, 255, 0.72);
   --bg-glass-hover: rgba(255, 255, 255, 0.88);
 
-  --text-primary: #1A1A1A;
-  --text-secondary: #4A4540;
-  --text-tertiary: #8A8278;
-  --text-muted: #B8AFA5;
+  --text-primary: #2D2535;
+  --text-secondary: #5A4E63;
+  --text-tertiary: #8E8298;
+  --text-muted: #B8AECA;
 
-  /* Accent — Dusty Terracotta */
-  --accent: #C4785E;
-  --accent-hover: #B36A50;
-  --accent-light: rgba(196, 120, 94, 0.1);
-  --accent-glow: rgba(196, 120, 94, 0.25);
+  /* Accent — Dusty Pink */
+  --accent: #E8A0B4;
+  --accent-hover: #D88EA3;
+  --accent-light: rgba(232, 160, 180, 0.12);
+  --accent-glow: rgba(232, 160, 180, 0.25);
 
-  /* Sage Green (secondary accent) */
-  --sage: #8BA888;
-  --sage-light: rgba(139, 168, 136, 0.12);
+  /* Secondary accent — Lavender */
+  --lavender: #C4B5E0;
+  --lavender-light: rgba(196, 181, 224, 0.12);
+
+  /* Sage/Mint accent */
+  --sage: #B8D4C8;
+  --sage-light: rgba(184, 212, 200, 0.15);
+
+  /* Peach */
+  --peach: #FFD6C9;
+  --peach-light: rgba(255, 214, 201, 0.2);
 
   /* Emotion-reactive ambient colors */
-  --ambient-neutral: #FAF7F2;
-  --ambient-sadness: #E8EDF5;
-  --ambient-anxiety: #FFF5EB;
-  --ambient-anger: #FDEEEE;
-  --ambient-joy: #F0F7EC;
-  --ambient-loneliness: #EDE8F5;
+  --ambient-neutral: #FFF8F2;
+  --ambient-sadness: #EDE4F5;
+  --ambient-anxiety: #FFF3E8;
+  --ambient-anger: #FDE8E8;
+  --ambient-joy: #EEFAE8;
+  --ambient-loneliness: #E8E0F5;
   --ambient-fear: #F0EDE8;
-  --ambient-relief: #E8F5F0;
+  --ambient-relief: #E4F5EF;
 
   /* Current ambient (changes via JS) */
   --ambient: var(--ambient-neutral);
@@ -51,6 +59,12 @@
   --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.06);
   --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.08);
   --shadow-glow: 0 0 40px var(--accent-glow);
+
+  /* Gradient helpers */
+  --gradient-peach-lavender: linear-gradient(135deg, #FFD6C9 0%, #E6D9FF 100%);
+  --gradient-cream-pink: linear-gradient(135deg, #FFF8F2 0%, #F4B6C2 100%);
+  --gradient-soft: linear-gradient(135deg, #FFF0EB 0%, #E6D9FF 50%, #FFD6C9 100%); 
+  --gradient-sidebar: linear-gradient(180deg, #FFF8F2 0%, #FFF0EB 50%, #F5EAE4 100%);
 
   /* Typography */
   --font-serif: 'Instrument Serif', Georgia, serif;
@@ -83,6 +97,55 @@
   --transition-ambient: 2000ms ease;
 }
 
+/* ─── Dark Theme ─── */
+[data-theme="dark"] {
+  --bg-primary: #1A1520;
+  --bg-secondary: #231E2B;
+  --bg-tertiary: #2D2636;
+  --bg-chat: #1E1928;
+  --bg-glass: rgba(30, 25, 40, 0.78);
+  --bg-glass-hover: rgba(40, 34, 54, 0.88);
+
+  --text-primary: #F0ECF5;
+  --text-secondary: #C4BCCE;
+  --text-tertiary: #8E8298;
+  --text-muted: #6A5F78;
+
+  --accent: #F4B6C2;
+  --accent-hover: #F9C8D2;
+  --accent-light: rgba(244, 182, 194, 0.12);
+  --accent-glow: rgba(244, 182, 194, 0.18);
+
+  --lavender: #A896CC;
+  --lavender-light: rgba(168, 150, 204, 0.12);
+
+  --sage: #8FBAA8;
+  --sage-light: rgba(143, 186, 168, 0.12);
+
+  --peach: #D4A896;
+  --peach-light: rgba(212, 168, 150, 0.12);
+
+  --ambient-neutral: #1A1520;
+  --ambient-sadness: #1A1828;
+  --ambient-anxiety: #221A18;
+  --ambient-anger: #221818;
+  --ambient-joy: #182018;
+  --ambient-loneliness: #1A1622;
+  --ambient-fear: #1A1A18;
+  --ambient-relief: #182220;
+
+  --border: rgba(255, 255, 255, 0.06);
+  --border-strong: rgba(255, 255, 255, 0.1);
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.2);
+  --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.3);
+  --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.4);
+
+  --gradient-peach-lavender: linear-gradient(135deg, rgba(212,168,150,0.3) 0%, rgba(168,150,204,0.3) 100%);
+  --gradient-cream-pink: linear-gradient(135deg, rgba(30,25,40,1) 0%, rgba(244,182,194,0.2) 100%);
+  --gradient-soft: linear-gradient(135deg, rgba(35,30,43,1) 0%, rgba(168,150,204,0.15) 50%, rgba(212,168,150,0.15) 100%);
+  --gradient-sidebar: linear-gradient(180deg, #1E1928 0%, #231E2B 50%, #2D2636 100%);
+}
+
 /* ─── Global Reset ─── */
 *, *::before, *::after {
   margin: 0;
@@ -102,7 +165,7 @@ body {
   color: var(--text-primary);
   background: var(--ambient);
   line-height: 1.7;
-  transition: background-color var(--transition-ambient);
+  transition: background-color var(--transition-ambient), color 400ms ease;
   min-height: 100vh;
 }
 
@@ -260,6 +323,30 @@ a:hover {
   box-shadow: var(--shadow-md);
 }
 
+/* ─── Theme Toggle ─── */
+.themeToggle {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 1px solid var(--border);
+  background: var(--bg-glass);
+  backdrop-filter: blur(12px);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  transition: all var(--transition-base);
+  color: var(--text-secondary);
+  flex-shrink: 0;
+}
+
+.themeToggle:hover {
+  background: var(--accent-light);
+  border-color: var(--accent);
+  transform: rotate(15deg) scale(1.05);
+}
+
 /* ─── Animations ─── */
 @keyframes fadeSlideUp {
   from {
@@ -319,6 +406,73 @@ a:hover {
 @keyframes cursorBlink {
   0%, 100% { opacity: 1; }
   50% { opacity: 0; }
+}
+
+@keyframes slideUpOverlay {
+  from {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideDownOverlay {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.92);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes popIn {
+  0% {
+    opacity: 0;
+    transform: scale(0.8) translateY(8px);
+  }
+  60% {
+    transform: scale(1.03) translateY(-2px);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+@keyframes countUp {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes softBounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-4px); }
+}
+
+@keyframes revealLine {
+  from { width: 0; }
+  to { width: 100%; }
+}
+
+@keyframes ripple {
+  0% { transform: scale(0); opacity: 0.5; }
+  100% { transform: scale(4); opacity: 0; }
 }
 
 .animate-fade-up {

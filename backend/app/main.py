@@ -5,7 +5,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from app.core.config import get_settings
 from app.db.base import Base
 from app.db.session import engine
-from app.api.routes import auth, chat, sessions, health
+from app.api.routes import auth, chat, sessions, health, user
 
 # Import all models so they're registered with Base
 from app.models.db.user import User
@@ -55,6 +55,7 @@ app.include_router(auth.router, prefix="/api")
 app.include_router(chat.router, prefix="/api")
 app.include_router(sessions.router, prefix="/api")
 app.include_router(health.router, prefix="/api")
+app.include_router(user.router, prefix="/api")
 
 
 @app.get("/")

@@ -1,5 +1,6 @@
 /* ═══════════════════════════════════════════════
    Chat Page — The heart of Solace
+   Pastel palette with dark mode support
    ═══════════════════════════════════════════════ */
 
 .chatPage {
@@ -16,7 +17,7 @@
   width: 300px;
   min-width: 300px;
   height: 100%;
-  background: var(--bg-chat);
+  background: var(--gradient-sidebar);
   border-right: 1px solid var(--border);
   display: flex;
   flex-direction: column;
@@ -28,13 +29,18 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: var(--space-lg) var(--space-lg) var(--space-md);
+  padding: var(--space-lg) var(--space-lg) var(--space-sm);
 }
 
 .sidebarLogo {
   display: flex;
   align-items: center;
   gap: var(--space-sm);
+  transition: opacity var(--transition-fast);
+}
+
+.sidebarLogo:hover {
+  opacity: 0.7;
 }
 
 .logoIcon {
@@ -48,6 +54,13 @@
   color: var(--text-primary);
 }
 
+.sidebarTagline {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  padding: 0 var(--space-lg) var(--space-md);
+  letter-spacing: 0.02em;
+}
+
 .closeSidebar {
   display: none;
   background: none;
@@ -56,6 +69,13 @@
   color: var(--text-muted);
   cursor: pointer;
   padding: var(--space-xs);
+  border-radius: 50%;
+  transition: all var(--transition-fast);
+}
+
+.closeSidebar:hover {
+  background: var(--accent-light);
+  color: var(--text-secondary);
 }
 
 .newChatBtn {
@@ -87,11 +107,13 @@
 }
 
 .sessionItem:hover {
-  background: var(--bg-secondary);
+  background: var(--accent-light);
+  transform: translateX(2px);
 }
 
 .sessionActive {
   background: var(--accent-light) !important;
+  border-left: 2px solid var(--accent);
 }
 
 .sessionEmotion {
@@ -146,6 +168,12 @@
   min-height: 60px;
 }
 
+.headerLeft {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
 .menuBtn {
   display: none;
   background: none;
@@ -153,6 +181,34 @@
   color: var(--text-secondary);
   cursor: pointer;
   padding: var(--space-xs);
+}
+
+.logoBtn {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: var(--space-xs) var(--space-sm);
+  border-radius: var(--radius-sm);
+  transition: all var(--transition-fast);
+  font-family: var(--font-sans);
+}
+
+.logoBtn:hover {
+  background: var(--accent-light);
+}
+
+.logoBtnIcon {
+  font-size: 1.1rem;
+  color: var(--accent);
+}
+
+.logoBtnText {
+  font-family: var(--font-serif);
+  font-size: 1.1rem;
+  color: var(--text-primary);
 }
 
 .headerCenter {
@@ -170,6 +226,7 @@
   border-radius: var(--radius-full);
   animation: fadeSlideDown 0.4s var(--ease-out) both;
   transition: all var(--transition-base);
+  border: 1px solid var(--border);
 }
 
 .emotionEmoji {
@@ -185,7 +242,7 @@
 .headerRight {
   display: flex;
   align-items: center;
-  gap: var(--space-md);
+  gap: var(--space-sm);
 }
 
 .streakBadge {
@@ -194,12 +251,22 @@
   gap: 4px;
   padding: var(--space-xs) var(--space-sm);
   background: var(--sage-light);
+  border: 1px solid var(--border);
   border-radius: var(--radius-full);
   font-size: 0.75rem;
+  cursor: default;
+  position: relative;
+  transition: all var(--transition-base);
+}
+
+.streakBadge:hover {
+  background: var(--peach-light);
+  transform: scale(1.05);
 }
 
 .streakFlame {
   font-size: 0.85rem;
+  animation: softBounce 2s ease-in-out infinite;
 }
 
 .streakCount {
@@ -207,11 +274,27 @@
   color: var(--sage);
 }
 
+.streakTooltip {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  background: var(--bg-chat);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: var(--space-sm) var(--space-md);
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  white-space: nowrap;
+  box-shadow: var(--shadow-md);
+  animation: fadeSlideDown 0.2s ease both;
+  z-index: 20;
+}
+
 .avatarCircle {
-  width: 32px;
-  height: 32px;
+  width: 34px;
+  height: 34px;
   border-radius: 50%;
-  background: var(--accent);
+  background: var(--gradient-peach-lavender);
   color: white;
   display: flex;
   align-items: center;
@@ -219,6 +302,16 @@
   font-size: 0.8125rem;
   font-weight: 600;
   flex-shrink: 0;
+  cursor: pointer;
+  border: none;
+  transition: all var(--transition-base);
+  font-family: var(--font-sans);
+  box-shadow: 0 2px 8px var(--peach-light);
+}
+
+.avatarCircle:hover {
+  transform: scale(1.1);
+  box-shadow: 0 4px 16px var(--peach-light);
 }
 
 /* ─── Safety Banner ─── */
@@ -277,18 +370,43 @@
   padding: var(--space-2xl);
 }
 
+.emptyOrbContainer {
+  position: relative;
+  width: 100px;
+  height: 100px;
+  margin-bottom: var(--space-md);
+}
+
 .emptyOrb {
+  position: absolute;
   width: 80px;
   height: 80px;
   border-radius: 50%;
   background: radial-gradient(
     circle,
-    rgba(196, 120, 94, 0.15) 0%,
-    rgba(196, 120, 94, 0.05) 50%,
+    rgba(255, 214, 201, 0.25) 0%,
+    rgba(232, 160, 180, 0.1) 50%,
     transparent 70%
   );
-  margin-bottom: var(--space-md);
+  top: 0;
+  left: 10px;
   animation: gentlePulse 4s ease-in-out infinite;
+}
+
+.emptyOrb2 {
+  position: absolute;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    rgba(230, 217, 255, 0.3) 0%,
+    rgba(196, 181, 224, 0.1) 50%,
+    transparent 70%
+  );
+  bottom: 0;
+  right: 5px;
+  animation: gentlePulse 4s ease-in-out infinite 1s;
 }
 
 .promptSuggestions {
@@ -309,7 +427,7 @@
   font-size: 0.8125rem;
   color: var(--text-secondary);
   cursor: pointer;
-  transition: all var(--transition-fast);
+  transition: all var(--transition-base);
   white-space: nowrap;
 }
 
@@ -317,6 +435,8 @@
   border-color: var(--accent);
   color: var(--accent);
   background: var(--accent-light);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-sm);
 }
 
 /* ─── Message Bubbles ─── */
@@ -366,8 +486,8 @@
 }
 
 .userContent {
-  background: var(--text-primary);
-  color: var(--bg-primary);
+  background: var(--accent);
+  color: #FFFFFF;
   border-bottom-right-radius: var(--space-xs);
   font-size: 0.9375rem;
 }
@@ -557,5 +677,9 @@
   .promptChip {
     white-space: normal;
     text-align: left;
+  }
+
+  .logoBtnText {
+    display: none;
   }
 }
