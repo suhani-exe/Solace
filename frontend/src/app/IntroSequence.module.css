@@ -1,0 +1,194 @@
+.introContainer {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  pointer-events: none;
+}
+
+.introContainer.active {
+  pointer-events: auto;
+}
+
+/* Base overlay that holds everything */
+.fadeOut {
+  animation: completeFadeOut 1s ease-in-out forwards;
+}
+
+@keyframes completeFadeOut {
+  from { opacity: 1; visibility: visible; }
+  to { opacity: 0; visibility: hidden; }
+}
+
+/* ─── Curtains ─── */
+.curtain {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 50vw;
+  background: #000000;
+  z-index: 10;
+  transition: transform 1.5s cubic-bezier(0.65, 0, 0.15, 1);
+  will-change: transform;
+}
+
+.leftCurtain {
+  left: 0;
+  transform-origin: left;
+}
+
+.rightCurtain {
+  right: 0;
+  transform-origin: right;
+}
+
+.curtainsOpen .leftCurtain {
+  transform: translateX(-100%);
+}
+
+.curtainsOpen .rightCurtain {
+  transform: translateX(100%);
+}
+
+/* ─── Pull Chain UI ─── */
+.switchContainer {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 20;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  cursor: pointer;
+  padding-bottom: 40px; /* click area */
+  transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.switchContainer:hover .switchText {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.switchContainer.pulling {
+  transform: translateX(-50%) translateY(40px); /* The pull down effect */
+}
+
+/* The cord itself */
+.cord {
+  width: 2px;
+  height: 15vh;
+  min-height: 100px;
+  background: linear-gradient(to bottom, #444, #888);
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
+  position: relative;
+}
+
+/* Distinct chain links texturing if needed, or simple cord */
+.cord::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -2px;
+  right: -2px;
+  bottom: 0;
+  background: repeating-linear-gradient(
+    transparent,
+    transparent 4px,
+    rgba(0,0,0,0.3) 4px,
+    rgba(0,0,0,0.3) 6px
+  );
+}
+
+/* The fob/handle at the end */
+.handle {
+  width: 14px;
+  height: 24px;
+  background: linear-gradient(135deg, #bbb, #fff);
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(255,255,255,0.2), inset 0 2px 4px rgba(255,255,255,0.5);
+  margin-top: -2px;
+  z-index: 2;
+}
+
+.switchText {
+  margin-top: 24px;
+  color: #888;
+  font-family: var(--font-sans, sans-serif);
+  font-size: 0.85rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  opacity: 0.5;
+  transform: translateY(-8px);
+  transition: all 0.4s ease;
+  pointer-events: none;
+}
+
+/* Glow around the switch to invite clicking */
+.switchGlow {
+  position: absolute;
+  bottom: 20px;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+  animation: pulse 2s infinite;
+  pointer-events: none;
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); opacity: 0.5; }
+  50% { transform: scale(1.5); opacity: 0.8; }
+}
+
+/* ─── Serene Background Revealed ─── */
+.sereneReveal {
+  position: absolute;
+  inset: 0;
+  background: var(--bg-primary, #0A0710);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 5;
+  overflow: hidden;
+  opacity: 0;
+  transition: opacity 1s ease;
+}
+
+.revealed .sereneReveal {
+  opacity: 1;
+}
+
+.sereneGlow {
+  position: absolute;
+  width: 60vw;
+  height: 60vw;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(181, 165, 219, 0.4), rgba(228, 190, 175, 0.2), transparent 70%);
+  filter: blur(80px);
+  animation: calmBreath 8s ease-in-out infinite;
+}
+
+.sereneTitle {
+  font-family: var(--font-serif, serif);
+  font-size: clamp(3rem, 8vw, 6rem);
+  color: var(--text-primary, #fff);
+  letter-spacing: 0.2em;
+  opacity: 0;
+  transform: scale(0.95);
+  transition: opacity 2s ease 0.5s, transform 4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.revealed .sereneTitle {
+  opacity: 1;
+  transform: scale(1.05); /* Slow upscale for breathing effect */
+}
+
+@keyframes calmBreath {
+  0%, 100% { transform: scale(1) translateY(0); opacity: 0.6; }
+  50% { transform: scale(1.1) translateY(-20px); opacity: 0.9; }
+}

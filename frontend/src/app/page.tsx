@@ -3,17 +3,29 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import styles from "./page.module.css";
+import IntroSequence from "./IntroSequence";
 
 export default function LandingPage() {
   const router = useRouter();
   const [isVisible, setIsVisible] = useState(false);
   const [isDark, setIsDark] = useState(false);
+  const [showIntro, setShowIntro] = useState(true);
 
   useEffect(() => {
-    setIsVisible(true);
+    const hasSeenIntro = sessionStorage.getItem("solace_intro_seen");
+    if (hasSeenIntro) {
+      setShowIntro(false);
+      setIsVisible(true);
+    }
     const theme = localStorage.getItem("solace_theme");
     setIsDark(theme === "dark");
   }, []);
+
+  const handleIntroComplete = () => {
+    sessionStorage.setItem("solace_intro_seen", "true");
+    setShowIntro(false);
+    setTimeout(() => setIsVisible(true), 100);
+  };
 
   const toggleTheme = () => {
     const next = !isDark;
@@ -23,7 +35,9 @@ export default function LandingPage() {
   };
 
   return (
-    <div className={styles.landing}>
+    <>
+      {showIntro && <IntroSequence onComplete={handleIntroComplete} />}
+      <div className={styles.landing}>
       {/* Ambient background orbs */}
       <div className={styles.ambientOrbs}>
         <div className={styles.orb1} />
@@ -224,5 +238,6 @@ export default function LandingPage() {
         </div>
       </footer>
     </div>
+    </>
   );
 }

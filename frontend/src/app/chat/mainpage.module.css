@@ -160,6 +160,11 @@
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
+  transition: filter var(--transition-base);
+}
+
+:global([data-theme="dark"]) .heroTitle em {
+  filter: brightness(0.65) contrast(1.6) saturate(1.2);
 }
 
 .heroSubtitle {
