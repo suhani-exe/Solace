@@ -7,9 +7,10 @@
   display: flex;
   height: 100vh;
   height: 100dvh;
-  background: var(--ambient);
+  background: transparent;
   transition: background-color var(--transition-ambient);
   overflow: hidden;
+  position: relative;
 }
 
 /* ─── Sidebar ─── */
@@ -23,6 +24,9 @@
   flex-direction: column;
   transition: transform var(--transition-base);
   z-index: 50;
+  position: relative;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
 }
 
 .sidebarHeader {
@@ -153,6 +157,7 @@
   flex-direction: column;
   min-width: 0;
   position: relative;
+  z-index: 1;
 }
 
 /* ─── Header ─── */
@@ -243,6 +248,52 @@
   display: flex;
   align-items: center;
   gap: var(--space-sm);
+}
+
+/* ─── Pause & Breathe Button ─── */
+.breatheBtn {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 1px solid var(--border);
+  background: var(--bg-glass);
+  backdrop-filter: blur(12px);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--accent);
+  transition: all var(--transition-base);
+  flex-shrink: 0;
+  position: relative;
+}
+
+.breatheBtn::after {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  border-radius: 50%;
+  border: 1.5px solid var(--accent);
+  opacity: 0;
+  transform: scale(0.8);
+  transition: all var(--transition-base);
+}
+
+.breatheBtn:hover {
+  background: var(--accent-light);
+  border-color: var(--accent);
+  transform: scale(1.08);
+}
+
+.breatheBtn:hover::after {
+  opacity: 0.4;
+  transform: scale(1.15);
+  animation: breatheBtnPulse 2s ease-in-out infinite;
+}
+
+@keyframes breatheBtnPulse {
+  0%, 100% { transform: scale(1.1); opacity: 0.3; }
+  50% { transform: scale(1.3); opacity: 0; }
 }
 
 .streakBadge {

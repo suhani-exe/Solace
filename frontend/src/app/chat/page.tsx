@@ -8,6 +8,8 @@ import MoodTracker from "./MoodTracker";
 import MoodHistory from "./MoodHistory";
 import ProfilePopup from "./ProfilePopup";
 import MainPage from "./MainPage";
+import LavaLampBg from "./LavaLampBg";
+import BreathingOverlay from "./BreathingOverlay";
 
 interface ChatMessage {
   id: string;
@@ -105,6 +107,7 @@ export default function ChatPage() {
   const [showMainPage, setShowMainPage] = useState(false);
   const [isDark, setIsDark] = useState(false);
   const [streakTooltip, setStreakTooltip] = useState(false);
+  const [showBreathing, setShowBreathing] = useState(false);
 
   // Auth check
   useEffect(() => {
@@ -344,6 +347,14 @@ export default function ChatPage() {
 
   return (
     <div className={styles.chatPage}>
+      {/* Lava Lamp Background */}
+      <LavaLampBg />
+
+      {/* Breathing Overlay */}
+      {showBreathing && (
+        <BreathingOverlay onClose={() => setShowBreathing(false)} />
+      )}
+
       {/* Mood Tracker Modal */}
       {showMoodTracker && (
         <MoodTracker onClose={() => setShowMoodTracker(false)} />
@@ -486,6 +497,19 @@ export default function ChatPage() {
           </div>
 
           <div className={styles.headerRight}>
+            {/* Pause & Breathe Button */}
+            <button
+              className={styles.breatheBtn}
+              onClick={() => setShowBreathing(true)}
+              aria-label="Pause and breathe"
+              title="Pause & Breathe"
+            >
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+                <circle cx="12" cy="12" r="9" stroke="currentColor" strokeWidth="1.5" opacity="0.5" />
+                <circle cx="12" cy="12" r="4" fill="currentColor" opacity="0.6" />
+              </svg>
+            </button>
+
             <button
               className="themeToggle"
               onClick={toggleTheme}

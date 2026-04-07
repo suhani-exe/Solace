@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from "react";
 import styles from "./mainpage.module.css";
+import HealingActivities from "./HealingActivities";
 
 interface MainPageProps {
   userName: string;
@@ -156,6 +157,9 @@ export default function MainPage({ userName, careStreak, onClose, sessionCount }
           </div>
         </div>
       </section>
+
+      {/* Micro Healing Activities */}
+      <HealingActivities />
 
       {/* Mental Health Awareness Stats */}
       <section className={styles.statsSection}>
