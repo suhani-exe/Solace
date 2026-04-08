@@ -30,7 +30,7 @@ export default function IntroSequence({ onComplete }: IntroSequenceProps) {
         setTimeout(() => {
           onComplete();
         }, 1000); // Wait for the fadeOut animation to finish
-      }, 1500); // 1.5 seconds of serene background to read
+      }, 300); // 0.3 second of serene background to read
 
     }, 450); // 450ms pull animation
   };
